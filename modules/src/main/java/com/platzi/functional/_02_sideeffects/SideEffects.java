@@ -70,4 +70,9 @@ public class SideEffects {
         //...
         return "";
     }
+
+    public static void main(String[] args) {
+        System.out.println("Hello Platzi!");
+    }
+
 }
