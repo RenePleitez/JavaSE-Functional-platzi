@@ -40,7 +40,8 @@ public class NombresUtils {
     //En este ejemplo vamos a definir un método que nos va a generar una lista, esta es de tipo T para que sea genérica y pueda utilizarse para crear
     // listas de distintos tipos; además, se establece como parámetro que puede recibir una cantidad indefinida de elementos T y agregamos un return
     // donde indicamos que queremos que se genere una lista a partir de los mismos.
-    static <T> List<T> getList(T... elements){
+    //Clase 17 - Hacemos public la lista para poder importarla desde otro paquete
+    public static <T> List<T> getList(T... elements){
         return Arrays.asList(elements); //Utilizamos la clase Arrays de Utils y el método asList() para crear la lista de los elementos indicados como
                                         // parámetros del método getList(elements).
     }
