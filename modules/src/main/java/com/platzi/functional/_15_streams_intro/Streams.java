@@ -100,8 +100,61 @@ public class Streams {
         // pantalla. En pantalla veremos que tras las operaciones con los Streams generados, solo hay un curso que incluye el texto "Java" y
         // aparecerá en pantalla al ejecutar el código (con sus respectivos signos de exclamación porque 'justJavaCourses' se genera a partir del
         // consumo de 'emphasisCourses').
+        // Ya no se generan nuevos Streams a partir de un solo Streams base, como anteriormente se buscaba generar 2 Stream nuevos y diferentes a
+        // partir del Stream base 'coursesStream', sino que se mantiene una secuencia de consumo.
 
-    }// Ya no se generan nuevos Streams a partir de un solo Streams base, como anteriormente se buscaba generar 2 Stream nuevos y diferentes a
-    // partir del Stream base 'coursesStream', sino que se mantiene una secuencia de consumo.
+        /* Clase 24 - ¿Qué son los Stream listeners?
+        *
+        * Entonces, los Streams no parecen tan útiles si en cada nueva operación tenemos que almacenar un nuevo tipo de variable, esto va a hacer
+        *  que el código sea muy feo. Pero chaining sobresale como una solución para añadir un nuevo nivel de legibilidad.
+        * */
+        System.out.println("___________________________________");
+        //Generamos un nuevo Stream, que trabajará con Strings, basado en la List<> 'courseList' y lo llamaremos 'coursesStream2'. Este Stream será
+        // resultado de llamar a nuestra colección 'courseList', seguida de la sintaxis punto "." y el método stream(). Desde Java 8 se agregó la
+        // posibilidad de tomar directamente colecciones y generar Streams a partir de ellas (cualquier clase que implemente la interfaz Collection
+        // puede generar un Stream de sus elementos y con esto agregar operaciones de Streams)
+        Stream<String> coursesStream2 = courseList.stream();
+        addOperator(//En este caso tomamos como parámetro de la función estática 'addOperator' al Stream resultante de haber reemplazado "Python"
+                // por "Java", añadido signos de exclamación a los nombres de los cursos (!!¡¡) y filtrado los nombres de los cursos para obtener
+                // solo aquellos que contengan el texto "Java".
 
+                //Agregamos las operaciones de Streams utilizando chaining
+                coursesStream2.map(course -> course.replace("Python", "Java"))//Operación intermedia porque su estructura nos
+                                                                                                // indica que esta operación devuelve un Stream
+                .map(course -> "¡¡" + course + "!!")//Operación intermedia porque su estructura nos indica que esta operación devuelve un Stream
+                .filter(course -> course.contains("Java"))//Operación intermedia porque su estructura nos indica que esta operación devuelve un
+                                                            // Stream
+                // Esencialmente, esta forma de programar las operaciones es igual a cuando almacenamos los Streams resultantes en variables; sin
+                // embargo, de esta manera hacemos que el código sea más fluido y tenga mejor legibilidad, se permite hacer el conjunto de
+                // operaciones que necesitemos sobre un solo Stream.
+
+        ).forEach(System.out::println);//Operación final porque su estructura nos indica que esta operación devuelve void
+        //Podemos agregar el método forEach() a la función addOperator() porque sabemos que esta nos retorna un nuevo Stream. En este caso lo
+        // agregamos para mostrar la versatilidad de usar funciones que reciben un Stream y generan otro Stream nuevo. Es importante recalcar
+        // que una vez consumido un Stream, ya no puede volver a usarse.
+    }
+    //Los Streams tienen dos tipos de operaciones, intermedias y finales, la diferencia entre ellas es que la operación intermedia genera un nuevo
+    // Stream cuyo tipo depende de la operación y las operaciones finales generan un dato final después de haber concluido con las operaciones de
+    // Streams. Para identificar una u otra, sabemos que si la operación nos devuelve un Stream esta es intermedia; en cambio, si nos devuelve
+    // cualquier otro tipo de dato (incluso void) es una operación final.
+
+    //Una de las ventajas principales de los Streams respecto a lo que hacen las listas, es el hecho de que algunas de sus operaciones retornan
+    // Optionals; lo cual, nos permite generar código más funcional (código que solamente se ejecute cuando hayan datos presentes).
+
+    //Cabe mencionar que muchas veces vamos a terminar escribiendo funciones de tipo static o method que van a retornar un nuevo Stream<> de un
+    // cierto tipo (T) e internamente se le van a agregar operadores (map(), filter(), forEach(), etc.) a un Stream que se recibe como parámetro.
+    // Esto es algo muy común y es un tipo de HOF al tomar como parámetro un Stream, operar con respectivas funciones dicho parámetro y,
+    // finalmente, retornar un nuevo Stream cn las funciones aplicadas; más aún, esto podemos imaginarlo en un Stream que va a estar generado a
+    // partir de una base de datos, ya que vamos a estar agregando operaciones con respecto a dichos datos para transformarlos de un query a un
+    // resultado, después filtrar ese resultado y finalmente pasárselo a alguien más para que lo transforme a Jason, permitiendo así responder
+    // una petición web. El hacer este tipo de operaciones permite que el código sea más funcional y seguro (al no lidiar con la presencia o
+    // ausencia de datos), internamente Stream se encargará de hacer la iteración y Optional nos va a ayudar a hacer operaciones cuando no existen
+    // algunos datos.
+    static <T> Stream<T> addOperator(Stream<T> stream){
+        //Agreguemos un operador para ver qué elementos están pasando a través de nuestro Stream
+        return stream.peek(data -> System.out.println("Dato: " + data));//Nuevo Stream retornado a partir del operador/método/función 'peek()'
+        // peek(Consumer) es una función que toma un Consumer, pero no modifica los datos. Es muy similar a map(), pero recibe un dato y devuelve
+        // el mismo dato (solamente nos va a permitir generar una iteración sobre los datos del Stream para poder verlos, hace un Stream nuevo
+        // cuyo contenido está sin modificar (es igual) respecto al del Stream base)
+    }
 }
