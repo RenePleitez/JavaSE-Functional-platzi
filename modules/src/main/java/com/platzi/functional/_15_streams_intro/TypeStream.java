@@ -97,3 +97,9 @@ public class TypeStream {
 // parte, si se tienen muchos datos (cientos de miles o millones) es recomendable utilizar 'parallel()'. También, cabe resaltar que si es importante
 // el orden de los datos, NO deberíamos usar 'parallel()'.
 }
+/* Clase 30 - job-search: Un proyecto para encontrar trabajo
+* Construyamos un proyecto que nos ayude a encontrar trabajo utilizando la API de trabajos de GitHub, que es una API restfull, a través de la cual
+* podemos hacerle peticiones para que nos devuelva un listado de trabajos. Esta API no es muy complicada, tiene el consumo a través de gets para
+* poder encontrar los trabajos basados en palabras clave (internamente las conoce como descriptions), lo que haremos será enviar un Jason o URL de
+* petición y se nos devolverá por resultados un listado de trabajos con ese keyword o descripción específica. Podemos enviar keywords en relación a
+* la descripción del trabajo que buscamos, ubicaciones, si el trabajo que buscamos es de medio o tiempo completo.*/
